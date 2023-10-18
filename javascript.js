@@ -14,27 +14,30 @@ startButton.addEventListener('click', () => {
 document.querySelector('.openingDiv').style.display = 'none';
 document.querySelector('.selectionDiv').style.display = 'block';
 
+// Set scoreboard array
 let scoreboard = {tie: 0, humanWins: 0, computerWins: 0};
-
-let playerChoice = '';
 
 // Activate selection buttons
 let btn = document.querySelectorAll('.selectButton'); 
 
+    // Trigger game logic on click of selection btn
     btn.forEach(function(e){
-    e.addEventListener('click', () =>
-        {
+    e.addEventListener('click', () => {
+        
         // Extracting player choice from selected button
         playerChoice = e.innerHTML.toLowerCase();
 
+        // Get computer choise
         let computerChoice = getComputerChoice();
 
-        // Initiate round
-        let gameResult = playRound(playerChoice, computerChoice);
+        // Initiate round, get result code
+        let gameResultCode = playRound(playerChoice, computerChoice);
 
-        scoreBoard = tallyScore(gameResult, scoreboard);
+        // Update scoreboard
+        scoreBoard = tallyScoreSwitch(gameResultCode, scoreboard);
 
-        let parsedResult = parseResultMessage(gameResult);
+        // Get result message from result code
+        let parsedResult = getResultMessage(gameResultCode);
 
         // Selecting result div           
         resultsDiv = document.querySelector('.results');               
@@ -63,7 +66,6 @@ let btn = document.querySelectorAll('.selectButton');
     })
 });
 
-
 function overallWinner(scoreboard){
     if (scoreboard['tie'] === 5) {
        
@@ -78,29 +80,27 @@ function overallWinner(scoreboard){
             return result;
         }
  
-function tallyScore(gameResult, scoreboard) {
-    if (gameResult === "T")
-    {
+function tallyScoreSwitch(gameResultCode, scoreboard) {
+    switch (gameResultCode) {
+        case 'T':
         scoreboard['tie'] += 1;
-    }
-    else if (gameResult === "H")
-    {
+        break;
+
+        case 'H':
         scoreboard['humanWins'] += 1;
-    }
-    else 
-    {
+        break;
+
+        default:
         scoreboard['computerWins'] += 1;
-    }
-    return scoreboard;
+        }
     }
 
-function parseResultMessage(gameResult) {
-   
-    if (gameResult === "T") 
+function getResultMessage(gameResultCode) {
+    if (gameResultCode=== "T") 
         {
             return "Tie" 
         } 
-        else if (gameResult === "H") 
+        else if (gameResultCode=== "H") 
         {
             return "Human Wins"
         }
@@ -180,5 +180,25 @@ function playRound(playerSelection, computerSelection) {
             return "T";
         }        
     }
-    }
+}
 
+    
+// redundant functions
+
+// The following was replaced by a Switch
+
+function tallyScore(gameResultCode, scoreboard) {
+    if (gameResultCode=== "T")
+    {
+        scoreboard['tie'] += 1;
+    }
+    else if (gameResultCode=== "H")
+    {
+        scoreboard['humanWins'] += 1;
+    }
+    else 
+    {
+        scoreboard['computerWins'] += 1;
+    }
+    return scoreboard;
+    }
